@@ -135,6 +135,14 @@
             object-fit: cover;
             border: 1px solid #3b82f6;
         }
+
+        .stats-form {
+            background-color: #0f172a;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 5px;
+            border: 1px solid #3b82f6;
+        }
     </style>
 </head>
 <body>
@@ -150,8 +158,8 @@
                     <input type="text" id="newPlayerName" placeholder="مثال: احمد محمد علي" required>
                 </div>
                 <div class="input-group">
-                    <label for="newPlayerBirth">سنة المواليد (أو تاريخ الميلاد):</label>
-                    <input type="text" id="newPlayerBirth" placeholder="مثال: 2000 أو 15/05/2000" required>
+                    <label for="newPlayerBirth">سنة المواليد:</label>
+                    <input type="text" id="newPlayerBirth" placeholder="مثال: 2000" required>
                 </div>
                 <div class="input-group">
                     <label for="newPlayerPosition">مركز اللعب:</label>
@@ -169,6 +177,29 @@
                 </div>
                 <button type="submit" class="btn">إضافة اللاعب وتوليد الرمز</button>
             </form>
+        </div>
+
+        <div class="section">
+            <h2>تعديل إحصائيات اللاعبين</h2>
+            <div class="input-group">
+                <label for="selectPlayer">اختر اللاعب:</label>
+                <select id="selectPlayer" onchange="loadPlayerStats()">
+                    <option value="">اختر لاعباً لتعديل إحصائياته...</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="editMatches">عدد المباريات الملعوبة:</label>
+                <input type="number" id="editMatches" value="0">
+            </div>
+            <div class="input-group">
+                <label for="editGoals">عدد الأهداف (أو الأهداف المستقبضة):</label>
+                <input type="number" id="editGoals" value="0">
+            </div>
+            <div class="input-group">
+                <label for="editRating">التقييم العام (من 10):</label>
+                <input type="number" step="0.1" id="editRating" value="0" min="0" max="10">
+            </div>
+            <button class="btn" onclick="savePlayerStats()">حفظ الإحصائيات</button>
         </div>
 
         <div class="section">
@@ -192,13 +223,13 @@
 
     <script>
         let players = JSON.parse(localStorage.getItem('clubPlayers')) || [
-            { name: "احمد محمد علي", pass: "A123", birth: "2000", position: "وسط", image: "" }
+            { name: "احمد محمد علي", pass: "A123", birth: "2000", position: "وسط", image: "", matches: 0, goals: 0, rating: 0 }
         ];
 
         function generateShortPassword() {
             const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             const randomLetter = letters.charAt(Math.floor(Math.random() * letters.length));
-            const randomNumber = Math.floor(100 + Math.random() * 900); // 3 أرقام
+            const randomNumber = Math.floor(100 + Math.random() * 900);
             return randomLetter + randomNumber;
         }
 
@@ -214,8 +245,7 @@
             if (imageInput.files && imageInput.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const imageData = e.target.result;
-                    saveNewPlayer(name, pass, birth, position, imageData);
+                    saveNewPlayer(name, pass, birth, position, e.target.result);
                 };
                 reader.readAsDataURL(imageInput.files[0]);
             } else {
@@ -224,9 +254,13 @@
         }
 
         function saveNewPlayer(name, pass, birth, position, image) {
-            players.push({ name, pass, birth, position, image });
+            players.push({ 
+                name, pass, birth, position, image, 
+                matches: 0, goals: 0, rating: 0.0 
+            });
             localStorage.setItem('clubPlayers', JSON.stringify(players));
             updatePlayersList();
+            populateSelectPlayers();
             
             document.getElementById('newPlayerName').value = '';
             document.getElementById('newPlayerBirth').value = '';
@@ -236,14 +270,50 @@
             alert('تمت إضافة اللاعب بنجاح. رمز المرور الخاص به هو: ' + pass);
         }
 
+        function populateSelectPlayers() {
+            const select = document.getElementById('selectPlayer');
+            select.innerHTML = '<option value="">اختر لاعباً لتعديل إحصائياته...</option>';
+            players.forEach((p, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.text = p.name;
+                select.appendChild(opt);
+            });
+        }
+
+        function loadPlayerStats() {
+            const index = document.getElementById('selectPlayer').value;
+            if (index !== "") {
+                const p = players[index];
+                document.getElementById('editMatches').value = p.matches || 0;
+                document.getElementById('editGoals').value = p.goals || 0;
+                document.getElementById('editRating').value = p.rating || 0;
+            }
+        }
+
+        function savePlayerStats() {
+            const index = document.getElementById('selectPlayer').value;
+            if (index === "") {
+                alert('الرجاء اختيار لاعب أولاً.');
+                return;
+            }
+            players[index].matches = parseInt(document.getElementById('editMatches').value) || 0;
+            players[index].goals = parseInt(document.getElementById('editGoals').value) || 0;
+            players[index].rating = parseFloat(document.getElementById('editRating').value) || 0;
+            
+            localStorage.setItem('clubPlayers', JSON.stringify(players));
+            updatePlayersList();
+            alert('تم حفظ الإحصائيات بنجاح!');
+        }
+
         function deletePlayer(index) {
             const playerName = players[index].name;
             const confirmDelete = confirm('هل أنت متأكد من حذف اللاعب: ' + playerName + '؟');
-            
             if (confirmDelete) {
                 players.splice(index, 1);
                 localStorage.setItem('clubPlayers', JSON.stringify(players));
                 updatePlayersList();
+                populateSelectPlayers();
                 alert('تم حذف اللاعب ' + playerName + ' بنجاح.');
             }
         }
@@ -260,18 +330,16 @@
             players.forEach((p, index) => {
                 const item = document.createElement('div');
                 item.className = 'player-item';
-                
                 let imgTag = p.image ? `<img src="${p.image}" alt="صورة اللاعب">` : 'لا توجد صورة';
-
+                
                 item.innerHTML = `
                     ${imgTag}
                     <span><strong>${p.name}</strong></span>
                     <span>${p.position}</span>
-                    <span>مواليد: ${p.birth}</span>
                     <span>الرمز: <strong>${p.pass}</strong></span>
+                    <span>(لعب: ${p.matches || 0} | أهداف: ${p.goals || 0} | تقييم: ${p.rating || 0}/10)</span>
                     <button class="btn-danger" onclick="deletePlayer(${index})">حذف</button>
                 `;
-                
                 listContainer.appendChild(item);
             });
         }
@@ -284,7 +352,9 @@
             document.getElementById('newsContent').value = '';
         }
 
+        // عند تحميل الصفحة
         updatePlayersList();
+        populateSelectPlayers();
     </script>
 </body>
 </html>
