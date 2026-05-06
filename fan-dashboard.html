@@ -160,13 +160,11 @@
 
     <script>
         window.onload = function() {
-            // عرض الأخبار
             const storedNews = localStorage.getItem('clubNews');
             if (storedNews) {
                 document.getElementById('newsDisplay').innerText = storedNews;
             }
 
-            // عرض اللاعبين
             const storedPlayers = localStorage.getItem('clubPlayers');
             const listContainer = document.getElementById('fanPlayersList');
 
