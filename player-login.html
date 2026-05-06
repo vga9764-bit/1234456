@@ -106,7 +106,6 @@
             color: #ffffff;
         }
 
-        /* تنسيق بطاقة اللاعب */
         .profile-img {
             width: 120px;
             height: 120px;
@@ -140,6 +139,20 @@
 
         .profile-info strong {
             color: #3b82f6;
+        }
+
+        .stats-box {
+            background-color: #0369a1;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 15px;
+            text-align: right;
+            color: #ffffff;
+        }
+
+        .stats-box p {
+            margin: 4px 0;
+            font-size: 0.95rem;
         }
 
         .announcement-box {
@@ -180,8 +193,7 @@
     </div>
 
     <div class="profile-container" id="profileArea" style="display: none;">
-        <div id="playerDetails">
-            </div>
+        <div id="playerDetails"></div>
         
         <div class="announcement-box" id="announcementArea" style="display: none;">
             <strong>إعلان هام من الإدارة:</strong>
@@ -210,14 +222,13 @@
             const foundPlayer = playersList.find(p => p.name === nameInput && p.pass === passInput);
 
             if (foundPlayer) {
-                // إخفاء نموذج الدخول وإظهار الملف الشخصي
                 document.getElementById('loginArea').style.display = 'none';
                 document.getElementById('profileArea').style.display = 'block';
 
-                // عرض معلومات اللاعب
                 let imageSrc = foundPlayer.image || 'https://via.placeholder.com/120';
                 const playerDetailsDiv = document.getElementById('playerDetails');
 
+                // هنا يتم عرض الإحصائيات مع المعلومات
                 playerDetailsDiv.innerHTML = `
                     <img src="${imageSrc}" class="profile-img" alt="صورة اللاعب">
                     <h3>${foundPlayer.name}</h3>
@@ -225,10 +236,16 @@
                         <p><strong>مركز اللعب:</strong> ${foundPlayer.position || 'غير محدد'}</p>
                         <p><strong>سنة المواليد:</strong> ${foundPlayer.birth || 'غير محدد'}</p>
                         <p><strong>كلمة المرور:</strong> ${foundPlayer.pass}</p>
+                        
+                        <div class="stats-box">
+                            <h4>إحصائيات اللاعب:</h4>
+                            <p><strong>عدد المباريات:</strong> ${foundPlayer.matches || 0}</p>
+                            <p><strong>عدد الأهداف:</strong> ${foundPlayer.goals || 0}</p>
+                            <p><strong>التقييم العام:</strong> ${foundPlayer.rating || 0} / 10</p>
+                        </div>
                     </div>
                 `;
 
-                // فحص إذا كان هناك إعلان للإدارة لعرضه
                 const storedNews = localStorage.getItem('clubNews');
                 const announcementArea = document.getElementById('announcementArea');
                 const announcementText = document.getElementById('announcementText');
