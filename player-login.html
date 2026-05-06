@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دخول اللاعبين - Al-Rajaa Club</title>
+    <title>دخول الإدارة - Al-Rajaa Club</title>
     <style>
         * {
             box-sizing: border-box;
@@ -32,16 +32,6 @@
             border: 2px solid #3b82f6;
         }
 
-        .logo-area img {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 20px;
-            border-radius: 50%;
-            border: 2px solid #3b82f6;
-            background-color: #ffffff;
-            object-fit: cover;
-        }
-
         h2 {
             color: #3b82f6;
             margin-bottom: 25px;
@@ -57,7 +47,6 @@
             display: block;
             margin-bottom: 8px;
             color: #94a3b8;
-            font-size: 0.95rem;
         }
 
         .input-group input {
@@ -67,20 +56,7 @@
             border: 1px solid #3b82f6;
             border-radius: 6px;
             color: #ffffff;
-            font-size: 1rem;
             outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .input-group input:focus {
-            border-color: #1d4ed8;
-        }
-
-        .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 30px;
         }
 
         .btn {
@@ -89,83 +65,45 @@
             padding: 12px;
             border: none;
             border-radius: 6px;
-            font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 15px;
         }
 
         .btn:hover {
             background-color: #1d4ed8;
-        }
-
-        .btn-secondary {
-            background-color: transparent;
-            border: 1px solid #475569;
-            color: #94a3b8;
-        }
-
-        .btn-secondary:hover {
-            background-color: #334155;
-            color: #ffffff;
         }
     </style>
 </head>
 <body>
 
     <div class="login-container">
-        <div class="logo-area">
-            <img src="icon-192.png" alt="شعار النادي">
-        </div>
-
-        <h2>دخول اللاعبين</h2>
-
-        <form id="loginForm" onsubmit="checkPlayerLogin(event)">
+        <h2>تسجيل دخول الإدارة</h2>
+        <form onsubmit="checkAdmin(event)">
             <div class="input-group">
-                <label for="playerName">الاسم الثلاثي للاعب:</label>
-                <input type="text" id="playerName" placeholder="أدخل اسمك الثلاثي هنا" required>
+                <label for="adminPass">رمز الدخول السري للإدارة:</label>
+                <input type="password" id="adminPass" placeholder="أدخل رمز الإدارة" required>
             </div>
-
-            <div class="input-group">
-                <label for="password">كلمة المرور:</label>
-                <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
-            </div>
-
-            <div class="btn-group">
-                <button type="submit" class="btn">تسجيل الدخول</button>
-                <button type="button" class="btn btn-secondary" onclick="window.location.href='index.html'">العودة للرئيسية</button>
-            </div>
+            <button type="submit" class="btn">دخول</button>
+            <button type="button" class="btn" style="background-color: #475569; margin-top: 10px;" onclick="window.location.href='index.html'">العودة للرئيسية</button>
         </form>
     </div>
 
     <script>
-        function checkPlayerLogin(event) {
+        function checkAdmin(event) {
             event.preventDefault();
-
-            const nameInput = document.getElementById('playerName').value.trim();
-            const passInput = document.getElementById('password').value.trim();
-
-            // جلب البيانات المخزنة من لوحة الإدارة
-            const storedPlayers = localStorage.getItem('clubPlayers');
+            const pass = document.getElementById('adminPass').value;
             
-            if (!storedPlayers) {
-                alert('لا توجد بيانات للاعبين مسجلة. يرجى إضافة لاعبين أولاً من لوحة الإدارة.');
-                return;
-            }
-
-            const playersList = JSON.parse(storedPlayers);
-
-            // البحث عن اللاعب (مطابقة الاسم وكلمة المرور)
-            const foundPlayer = playersList.find(p => p.name === nameInput && p.pass === passInput);
-
-            if (foundPlayer) {
-                alert('أهلاً بك يا كابتن ' + nameInput + '. تم تسجيل الدخول بنجاح!');
-                // window.location.href = 'player-dashboard.html';
+            // --------------------------------------------------
+            // قم بتغيير النص الموجود بين علامتي الاقتباس بالرمز السري الذي تريده
+            // --------------------------------------------------
+            if (pass === "azooz368549299009") {
+                window.location.href = 'admin-dashboard.html';
             } else {
-                alert('خطأ: الاسم الثلاثي أو كلمة المرور غير صحيحة. يرجى التأكد من البيانات والمحاولة مرة أخرى.');
+                alert('رمز الدخول غير صحيح!');
             }
         }
     </script>
-
 </body>
 </html>
