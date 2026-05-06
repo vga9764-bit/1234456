@@ -125,6 +125,14 @@
             background-color: #0284c7;
         }
 
+        .btn-danger {
+            background-color: #e11d48;
+        }
+
+        .btn-danger:hover {
+            background-color: #be123c;
+        }
+
         .no-data {
             color: #94a3b8;
             text-align: center;
@@ -155,11 +163,18 @@
             <div id="fanPlayersList"></div>
         </div>
 
-        <button class="btn" onclick="window.location.href='index.html'">تسجيل خروج</button>
+        <button class="btn btn-danger" onclick="logout()">تسجيل خروج</button>
     </div>
 
     <script>
         window.onload = function() {
+            // التحقق من أن المشجع مسجل في الذاكرة
+            if (!localStorage.getItem('currentFan')) {
+                alert('الرجاء تسجيل الدخول أولاً.');
+                window.location.href = 'fan-login.html';
+                return;
+            }
+
             const storedNews = localStorage.getItem('clubNews');
             if (storedNews) {
                 document.getElementById('newsDisplay').innerText = storedNews;
@@ -195,6 +210,11 @@
                 listContainer.innerHTML = '<p class="no-data">قائمة اللاعبين غير متوفرة.</p>';
             }
         };
+
+        function logout() {
+            localStorage.removeItem('currentFan'); // حذف حالة الدخول
+            window.location.href = 'fan-login.html';
+        }
     </script>
 </body>
 </html>
