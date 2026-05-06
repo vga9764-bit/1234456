@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيق نادي Al-Rajaa Club</title>
+    <title>الصفحة الرئيسية - نادي Al-Rajaa Club</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3b82f6">
+
     <style>
         * {
             box-sizing: border-box;
@@ -18,15 +22,16 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            padding: 20px;
         }
 
-        .main-container {
+        .container {
             background-color: #1e293b;
             padding: 40px;
             border-radius: 16px;
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
             text-align: center;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
             border: 2px solid #3b82f6;
@@ -44,14 +49,14 @@
 
         h1 {
             color: #3b82f6;
-            margin-bottom: 15px;
-            font-size: 1.6rem;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
         }
 
         p {
             color: #94a3b8;
-            margin-bottom: 30px;
-            font-size: 0.95rem;
+            margin-bottom: 35px;
+            font-size: 1.05rem;
         }
 
         .btn-group {
@@ -66,44 +71,100 @@
             padding: 14px;
             border: none;
             border-radius: 6px;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s;
+            text-decoration: none;
+            display: block;
+            width: 100%;
         }
 
         .btn:hover {
             background-color: #1d4ed8;
         }
 
-        .btn-secondary {
-            background-color: transparent;
-            border: 1px solid #475569;
-            color: #94a3b8;
+        .btn-fan {
+            background-color: #0ea5e9;
         }
 
-        .btn-secondary:hover {
-            background-color: #334155;
-            color: #ffffff;
+        .btn-fan:hover {
+            background-color: #0284c7;
+        }
+
+        .btn-admin {
+            background-color: #64748b;
+        }
+
+        .btn-admin:hover {
+            background-color: #475569;
+        }
+
+        .btn-install {
+            background-color: #10b981;
+            display: none; /* يظهر تلقائياً عندما يدعم الجهاز التثبيت */
+            margin-top: 5px;
+        }
+
+        .btn-install:hover {
+            background-color: #059669;
         }
     </style>
 </head>
 <body>
 
-    <div class="main-container">
+    <div class="container">
         <div class="logo-area">
             <img src="icon-192.png" alt="شعار النادي">
         </div>
-        
+
         <h1>Al-Rajaa Club</h1>
-        <p>اختر لوحة التحكم للبدء</p>
+        <p>اختر لوحة التحكم الخاصة بك للبدء</p>
 
         <div class="btn-group">
-            <button class="btn" onclick="window.location.href='player-login.html'">دخول كلاعب</button>
-            <button class="btn" onclick="window.location.href='fan-login.html'">دخول كمشجع</button>
-            <button class="btn btn-secondary" onclick="window.location.href='admin-login.html'">دخول الإدارة (Admin)</button>
+            <a href="fan-login.html" class="btn btn-fan">دخول المشجعين</a>
+            <a href="player-login.html" class="btn">دخول اللاعبين</a>
+            <a href="admin-dashboard.html" class="btn btn-admin">لوحة تحكم الإدارة</a>
+            
+            <button id="installBtn" class="btn btn-install">📥 تثبيت التطبيق</button>
         </div>
     </div>
+
+    <script>
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // منع المتصفح من إظهار الرسالة التلقائية
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // إظهار الزر
+            const installBtn = document.getElementById('installBtn');
+            installBtn.style.display = 'block';
+
+            installBtn.addEventListener('click', () => {
+                installBtn.style.display = 'none';
+                deferredPrompt.prompt();
+                
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    }
+                    deferredPrompt = null;
+                });
+            });
+        });
+
+        // تسجيل الـ Service Worker لعمل التطبيق
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    console.log('Service Worker Registered!', reg);
+                }).catch(err => {
+                    console.log('Service Worker Failed to Register: ', err);
+                });
+            });
+        }
+    </script>
 
 </body>
 </html>
