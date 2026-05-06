@@ -111,111 +111,84 @@
         .player-item:last-child {
             border-bottom: none;
         }
-
-        .news-box {
-            margin-top: 20px;
-            background-color: #0f172a;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #3b82f6;
-        }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>لوحة تحكم إدارة Al-Rajaa Club</h1>
+        <h1>لوحة تحكم الإدارة</h1>
 
         <div class="section">
-            <h2>إضافة لاعب جديد</h2>
-            <form id="addPlayerForm" onsubmit="addPlayer(event)">
+            <h2>إضافة لاعب وتوليد كلمة مرور تلقائية</h2>
+            <form onsubmit="addPlayer(event)">
                 <div class="input-group">
-                    <label for="newPlayerName">الاسم الثلاثي:</label>
+                    <label for="newPlayerName">الاسم الثلاثي للاعب:</label>
                     <input type="text" id="newPlayerName" placeholder="مثال: احمد محمد علي" required>
                 </div>
-                <div class="input-group">
-                    <label for="newPlayerPass">كلمة المرور الخاصة باللاعب:</label>
-                    <input type="text" id="newPlayerPass" placeholder="مثال: rajaclub123" required>
-                </div>
-                <button type="submit" class="btn">إضافة اللاعب</button>
+                <button type="submit" class="btn">إضافة اللاعب وتوليد الرمز</button>
             </form>
         </div>
 
         <div class="section">
-            <h2>نشر إعلان أو تعليمات للفريق</h2>
-            <form id="newsForm" onsubmit="publishNews(event)">
+            <h2>نشر إعلان للفريق</h2>
+            <form onsubmit="publishNews(event)">
                 <div class="input-group">
                     <label for="newsContent">نص الإعلان:</label>
-                    <textarea id="newsContent" placeholder="اكتب التعليمات أو الإعلانات هنا لتظهر للاعبين..." required></textarea>
+                    <textarea id="newsContent" placeholder="اكتب التعليمات هنا..." required></textarea>
                 </div>
                 <button type="submit" class="btn">نشر الإعلان</button>
             </form>
         </div>
 
         <div>
-            <h2>اللاعبون المسجلون في الفريق</h2>
-            <div class="player-list" id="playersList">
-                <div class="player-item">
-                    <span><strong>احمد محمد علي</strong> - كلمة المرور: <span>12345</span></span>
-                </div>
-                <div class="player-item">
-                    <span><strong>علي حسن جاسم</strong> - كلمة المرور: <span>rajaclub2026</span></span>
-                </div>
-            </div>
+            <h2>اللاعبون المسجلون</h2>
+            <div class="player-list" id="playersList"></div>
         </div>
 
         <button type="button" class="btn btn-secondary" onclick="window.location.href='index.html'">العودة للرئيسية</button>
     </div>
 
     <script>
-        // مصفوفة بسيطة تحاكي قاعدة البيانات للاعبين
         let players = [
-            { name: "احمد محمد علي", pass: "12345" },
-            { name: "علي حسن جاسم", pass: "rajaclub2026" }
+            { name: "احمد محمد علي", pass: "12345" }
         ];
 
-        // دالة إضافة لاعب جديد
+        function generatePassword() {
+            // توليد رمز عشوائي مكون من 6 أرقام وحروف
+            return Math.random().toString(36).slice(-8);
+        }
+
         function addPlayer(event) {
             event.preventDefault();
             const name = document.getElementById('newPlayerName').value;
-            const pass = document.getElementById('newPlayerPass').value;
-
-            // إضافة اللاعب للمصفوفة
-            players.push({ name, pass });
+            const pass = generatePassword(); // توليد تلقائي
             
-            // تحديث القائمة المعروضة
+            players.push({ name, pass });
             updatePlayersList();
-
-            // تنظيف الخانات
+            
             document.getElementById('newPlayerName').value = '';
-            document.getElementById('newPlayerPass').value = '';
-
-            alert('تمت إضافة اللاعب ' + name + ' بنجاح!');
+            alert('تمت إضافة اللاعب بنجاح. رمز المرور الجديد هو: ' + pass);
         }
 
-        // دالة تحديث قائمة اللاعبين
         function updatePlayersList() {
             const listContainer = document.getElementById('playersList');
             listContainer.innerHTML = '';
-            
-            players.forEach(player => {
+            players.forEach(p => {
                 const item = document.createElement('div');
                 item.className = 'player-item';
-                item.innerHTML = `<span><strong>${player.name}</strong> - كلمة المرور: <span>${player.pass}</span></span>`;
+                item.innerHTML = `<span><strong>${p.name}</strong> - كلمة المرور: <span>${p.pass}</span></span>`;
                 listContainer.appendChild(item);
             });
         }
 
-        // دالة نشر الإعلانات
         function publishNews(event) {
             event.preventDefault();
             const content = document.getElementById('newsContent').value;
             localStorage.setItem('clubNews', content);
-            alert('تم نشر الإعلان بنجاح، سيظهر الآن للاعبين عند تسجيل الدخول!');
+            alert('تم نشر الإعلان بنجاح!');
             document.getElementById('newsContent').value = '';
         }
 
-        // تشغيل التحديث عند فتح الصفحة
         updatePlayersList();
     </script>
 </body>
