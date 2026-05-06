@@ -104,12 +104,9 @@
         .player-item {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
+            padding: 10px 0;
             border-bottom: 1px solid #334155;
-        }
-
-        .player-item:last-child {
-            border-bottom: none;
+            font-size: 1.1rem;
         }
     </style>
 </head>
@@ -119,7 +116,7 @@
         <h1>لوحة تحكم الإدارة</h1>
 
         <div class="section">
-            <h2>إضافة لاعب وتوليد كلمة مرور تلقائية</h2>
+            <h2>إضافة لاعب جديد</h2>
             <form onsubmit="addPlayer(event)">
                 <div class="input-group">
                     <label for="newPlayerName">الاسم الثلاثي للاعب:</label>
@@ -149,22 +146,24 @@
     </div>
 
     <script>
-        // قراءة البيانات من الذاكرة أو إنشاء لاعب افتراضي
+        // قراءة البيانات من الذاكرة
         let players = JSON.parse(localStorage.getItem('clubPlayers')) || [
-            { name: "احمد محمد علي", pass: "12345" }
+            { name: "احمد محمد علي", pass: "A123" }
         ];
 
-        function generatePassword() {
-            // توليد رمز عشوائي بسيط ومختصر
-            return Math.random().toString(36).slice(-6).toUpperCase();
+        // دالة توليد الرمز بدون شارحة (حرف إنجليزي + 3 أرقام: مثال R742)
+        function generateShortPassword() {
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const randomLetter = letters.charAt(Math.floor(Math.random() * letters.length));
+            const randomNumber = Math.floor(100 + Math.random() * 900); // 3 أرقام
+            return randomLetter + randomNumber;
         }
 
         function addPlayer(event) {
             event.preventDefault();
             const name = document.getElementById('newPlayerName').value.trim();
-            const pass = generatePassword(); // توليد تلقائي
+            const pass = generateShortPassword();
             
-            // إضافة اللاعب وتخزينه
             players.push({ name, pass });
             localStorage.setItem('clubPlayers', JSON.stringify(players));
             
@@ -186,7 +185,7 @@
             players.forEach(p => {
                 const item = document.createElement('div');
                 item.className = 'player-item';
-                item.innerHTML = `<span><strong>${p.name}</strong> - كلمة المرور: <span>${p.pass}</span></span>`;
+                item.innerHTML = `<span><strong>${p.name}</strong></span> <span>الرمز: <strong>${p.pass}</strong></span>`;
                 listContainer.appendChild(item);
             });
         }
