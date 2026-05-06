@@ -5,37 +5,168 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>دخول اللاعبين - Al-Rajaa Club</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #0f172a; color: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .login-container { background-color: #1e293b; padding: 40px; border-radius: 16px; width: 100%; max-width: 400px; text-align: center; border: 2px solid #3b82f6; }
-        h2 { color: #3b82f6; margin-bottom: 25px; }
-        .input-group { margin-bottom: 20px; text-align: right; }
-        .input-group label { color: #94a3b8; display: block; margin-bottom: 8px; }
-        .input-group input { width: 100%; padding: 12px; background-color: #0f172a; border: 1px solid #3b82f6; border-radius: 6px; color: #ffffff; outline: none; }
-        .btn { background-color: #3b82f6; color: #ffffff; padding: 12px; border: none; border-radius: 6px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background-color: #1e293b;
+            padding: 40px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            border: 2px solid #3b82f6;
+        }
+
+        .logo-area img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            border-radius: 50%;
+            border: 2px solid #3b82f6;
+            background-color: #ffffff;
+            object-fit: cover;
+        }
+
+        h2 {
+            color: #3b82f6;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            background-color: #0f172a;
+            border: 1px solid #3b82f6;
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #1d4ed8;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            background-color: #3b82f6;
+            color: #ffffff;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid #475569;
+            color: #94a3b8;
+        }
+
+        .btn-secondary:hover {
+            background-color: #334155;
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
+
     <div class="login-container">
+        <div class="logo-area">
+            <img src="icon-192.png" alt="شعار النادي">
+        </div>
+
         <h2>دخول اللاعبين</h2>
+
         <form id="loginForm" onsubmit="checkPlayerLogin(event)">
             <div class="input-group">
-                <label>الاسم الثلاثي:</label>
-                <input type="text" id="playerName" required>
+                <label for="playerName">الاسم الثلاثي للاعب:</label>
+                <input type="text" id="playerName" placeholder="أدخل اسمك الثلاثي هنا" required>
             </div>
+
             <div class="input-group">
-                <label>كلمة المرور:</label>
-                <input type="password" id="password" required>
+                <label for="password">كلمة المرور (المُعطاة من الإدارة):</label>
+                <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
             </div>
-            <button type="submit" class="btn">تسجيل الدخول</button>
-            <button type="button" class="btn" style="background-color: #475569;" onclick="window.location.href='index.html'">العودة</button>
+
+            <div class="btn-group">
+                <button type="submit" class="btn">تسجيل الدخول</button>
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='index.html'">العودة للرئيسية</button>
+            </div>
         </form>
     </div>
+
     <script>
         function checkPlayerLogin(event) {
             event.preventDefault();
-            alert('تم تسجيل الدخول بنجاح!'); // هنا يتم التحقق مستقبلاً
+
+            const nameInput = document.getElementById('playerName').value.trim();
+            const passInput = document.getElementById('password').value.trim();
+
+            // جلب قائمة اللاعبين من التخزين المحلي (التي تم إنشاؤها في لوحة الإدارة)
+            const storedPlayers = localStorage.getItem('clubPlayers');
+            let playersList = [];
+
+            if (storedPlayers) {
+                playersList = JSON.parse(storedPlayers);
+            } else {
+                // إذا لم توجد بيانات، نضع اللاعب الافتراضي
+                playersList = [{ name: "احمد محمد علي", pass: "12345" }];
+            }
+
+            // البحث عن اللاعب في القائمة
+            const foundPlayer = playersList.find(p => p.name === nameInput && p.pass === passInput);
+
+            if (foundPlayer) {
+                alert('أهلاً بك يا كابتن ' + nameInput + '. تم تسجيل الدخول بنجاح!');
+                // window.location.href = 'player-dashboard.html';
+            } else {
+                alert('خطأ: الاسم الثلاثي أو كلمة المرور غير صحيحة. يرجى التأكد من البيانات والمحاولة مرة أخرى.');
+            }
         }
     </script>
+
 </body>
 </html>
