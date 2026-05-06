@@ -143,7 +143,7 @@
         <h1>لوحة تحكم الإدارة</h1>
 
         <div class="section">
-            <h2>إضافة لاعب جديد</h2>
+            <h2>إضافة لاعب جديد وتوليد رمز المرور</h2>
             <form onsubmit="addPlayer(event)">
                 <div class="input-group">
                     <label for="newPlayerName">الاسم الثلاثي للاعب:</label>
@@ -213,7 +213,7 @@
         </div>
 
         <div>
-            <h2>اللاعبون المسجلون</h2>
+            <h2>اللاعبون المسجلون (مع الرموز)</h2>
             <div class="player-list" id="playersList"></div>
         </div>
 
@@ -321,7 +321,6 @@
             const listContainer = document.getElementById('playersList');
             listContainer.innerHTML = '';
 
-            // تحديث عدد المشجعين
             const fans = JSON.parse(localStorage.getItem('clubFans')) || [];
             document.getElementById('fanCount').innerText = fans.length;
             
@@ -339,7 +338,7 @@
                     ${imgTag}
                     <span><strong>${p.name}</strong></span>
                     <span>${p.position}</span>
-                    <span>الرمز: <strong>${p.pass}</strong></span>
+                    <span>الرمز: <strong>${p.pass || 'غير موجود'}</strong></span>
                     <span>(لعب: ${p.matches || 0} | أهداف: ${p.goals || 0} | تقييم: ${p.rating || 0}/10)</span>
                     <button class="btn-danger" onclick="deletePlayer(${index})">حذف</button>
                 `;
@@ -355,7 +354,6 @@
             document.getElementById('newsContent').value = '';
         }
 
-        // عند تحميل الصفحة
         updatePlayersList();
         populateSelectPlayers();
     </script>
