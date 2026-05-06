@@ -127,7 +127,7 @@
             </div>
 
             <div class="input-group">
-                <label for="password">كلمة المرور (المُعطاة من الإدارة):</label>
+                <label for="password">كلمة المرور:</label>
                 <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
             </div>
 
@@ -145,18 +145,17 @@
             const nameInput = document.getElementById('playerName').value.trim();
             const passInput = document.getElementById('password').value.trim();
 
-            // جلب قائمة اللاعبين من التخزين المحلي (التي تم إنشاؤها في لوحة الإدارة)
+            // جلب البيانات المخزنة من لوحة الإدارة
             const storedPlayers = localStorage.getItem('clubPlayers');
-            let playersList = [];
-
-            if (storedPlayers) {
-                playersList = JSON.parse(storedPlayers);
-            } else {
-                // إذا لم توجد بيانات، نضع اللاعب الافتراضي
-                playersList = [{ name: "احمد محمد علي", pass: "12345" }];
+            
+            if (!storedPlayers) {
+                alert('لا توجد بيانات للاعبين مسجلة. يرجى إضافة لاعبين أولاً من لوحة الإدارة.');
+                return;
             }
 
-            // البحث عن اللاعب في القائمة
+            const playersList = JSON.parse(storedPlayers);
+
+            // البحث عن اللاعب (مطابقة الاسم وكلمة المرور)
             const foundPlayer = playersList.find(p => p.name === nameInput && p.pass === passInput);
 
             if (foundPlayer) {
