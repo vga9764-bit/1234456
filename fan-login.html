@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>جمهور نادي Al-Rajaa Club</title>
+    <title>دخول المشجعين - Al-Rajaa Club</title>
     <style>
         * {
             box-sizing: border-box;
@@ -15,194 +15,146 @@
         body {
             background-color: #0f172a;
             color: #ffffff;
-            padding: 20px;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
+            height: 100vh;
+            padding: 20px;
         }
 
-        .container {
-            width: 100%;
-            max-width: 600px;
+        .login-container {
             background-color: #1e293b;
-            padding: 25px;
+            padding: 40px;
             border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
             border: 2px solid #0ea5e9;
-            text-align: center;
         }
 
         .logo-area img {
             width: 90px;
             height: 90px;
+            margin-bottom: 20px;
             border-radius: 50%;
             border: 2px solid #0ea5e9;
             background-color: #ffffff;
-            margin-bottom: 15px;
             object-fit: cover;
-        }
-
-        h1 {
-            color: #0ea5e9;
-            margin-bottom: 10px;
-            font-size: 1.8rem;
-        }
-
-        .section {
-            margin-top: 30px;
-            text-align: right;
         }
 
         h2 {
-            color: #38bdf8;
-            font-size: 1.3rem;
-            border-bottom: 1px solid #334155;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+            color: #0ea5e9;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
         }
 
-        /* تنسيق صندوق الأخبار */
-        .news-box {
-            background-color: #0c4a6e;
-            padding: 20px;
-            border-radius: 12px;
-            border-right: 5px solid #0ea5e9;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #f1f5f9;
+        .input-group {
+            margin-bottom: 20px;
+            text-align: right;
         }
 
-        /* تنسيق قائمة اللاعبين للمشجعين */
-        .player-card {
-            background-color: #0f172a;
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #334155;
-            gap: 15px;
-        }
-
-        .player-card img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #0ea5e9;
-        }
-
-        .player-info h4 {
-            color: #f8fafc;
-            font-size: 1.1rem;
-            margin-bottom: 4px;
-        }
-
-        .player-info p {
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
             color: #94a3b8;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
-        .player-stats {
-            margin-top: 5px;
-            color: #fbbf24;
-            font-weight: bold;
-            font-size: 0.85rem;
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            background-color: #0f172a;
+            border: 1px solid #0ea5e9;
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #0284c7;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 30px;
         }
 
         .btn {
             background-color: #0ea5e9;
             color: #ffffff;
-            padding: 12px 25px;
+            padding: 12px;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
+            font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 30px;
-            width: 100%;
-            transition: 0.3s;
+            transition: background-color 0.3s;
         }
 
         .btn:hover {
             background-color: #0284c7;
         }
 
-        .no-data {
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid #475569;
             color: #94a3b8;
-            text-align: center;
-            font-style: italic;
-            padding: 20px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #334155;
+            color: #ffffff;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div class="login-container">
         <div class="logo-area">
             <img src="icon-192.png" alt="شعار النادي">
         </div>
-        
-        <h1>Al-Rajaa Club</h1>
-        <p style="color: #94a3b8;">مرحباً بكم في صفحة المشجعين الرسمية</p>
 
-        <div class="section">
-            <h2>أخبار النادي وإعلانات الإدارة</h2>
-            <div id="newsDisplay" class="news-box">
-                لا توجد أخبار جديدة حالياً.
+        <h2>دخول المشجعين</h2>
+
+        <form id="fanLoginForm" onsubmit="saveFanAndRedirect(event)">
+            <div class="input-group">
+                <label for="fanName">اسم المشجع الثلاثي (أو اللقب):</label>
+                <input type="text" id="fanName" placeholder="أدخل اسمك هنا" required>
             </div>
-        </div>
 
-        <div class="section">
-            <h2>قائمة لاعبي الفريق</h2>
-            <div id="fanPlayersList">
-                </div>
-        </div>
-
-        <button class="btn" onclick="window.location.href='index.html'">العودة للرئيسية</button>
+            <div class="btn-group">
+                <button type="submit" class="btn">دخول</button>
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='index.html'">العودة للرئيسية</button>
+            </div>
+        </form>
     </div>
 
     <script>
-        window.onload = function() {
-            // 1. عرض الأخبار
-            const storedNews = localStorage.getItem('clubNews');
-            if (storedNews) {
-                document.getElementById('newsDisplay').innerText = storedNews;
-            }
-
-            // 2. عرض قائمة اللاعبين (معلومات عامة فقط)
-            const storedPlayers = localStorage.getItem('clubPlayers');
-            const listContainer = document.getElementById('fanPlayersList');
-
-            if (storedPlayers) {
-                const players = JSON.parse(storedPlayers);
-                
-                if (players.length === 0) {
-                    listContainer.innerHTML = '<p class="no-data">لم يتم تسجيل لاعبين في القائمة بعد.</p>';
-                } else {
-                    listContainer.innerHTML = ''; // تفريغ المحتوى
-                    players.forEach(p => {
-                        const card = document.createElement('div');
-                        card.className = 'player-card';
-
-                        let imgUrl = p.image || 'https://via.placeholder.com/60';
-                        
-                        card.innerHTML = `
-                            <img src="${imgUrl}" alt="لاعب">
-                            <div class="player-info">
-                                <h4>${p.name}</h4>
-                                <p>المركز: ${p.position || 'غير محدد'}</p>
-                                <div class="player-stats">
-                                    أهداف: ${p.goals || 0} | مباريات: ${p.matches || 0} | التقييم: ${p.rating || 0}/10
-                                </div>
-                            </div>
-                        `;
-                        listContainer.appendChild(card);
-                    });
-                }
-            } else {
-                listContainer.innerHTML = '<p class="no-data">قائمة اللاعبين غير متوفرة حالياً.</p>';
-            }
-        };
+        function saveFanAndRedirect(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('fanName').value.trim();
+            
+            // جلب المشجعين السابقين من الذاكرة أو إنشاء قائمة جديدة
+            let fansList = JSON.parse(localStorage.getItem('clubFans')) || [];
+            
+            // إضافة اسم المشجع الجديد إلى القائمة
+            fansList.push({ name: name, joinedDate: new Date().toLocaleDateString() });
+            
+            // حفظ القائمة المحدثة
+            localStorage.setItem('clubFans', JSON.stringify(fansList));
+            
+            alert('أهلاً بك يا مشجعنا! تم تسجيل دخولك بنجاح.');
+            
+            // توجيه المشجع إلى صفحة عرض الأخبار واللاعبين
+            window.location.href = 'fan-dashboard.html';
+        }
     </script>
+
 </body>
 </html>
