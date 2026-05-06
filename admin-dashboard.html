@@ -93,6 +93,19 @@
             color: #ffffff;
         }
 
+        /* مربع إظهار الرمز */
+        .generated-code-box {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #0f172a;
+            border: 2px dashed #10b981;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 1.3rem;
+            color: #10b981;
+            display: none; /* يكون مخفياً حتى تولد الرمز */
+        }
+
         .player-list {
             margin-top: 20px;
             background-color: #0f172a;
@@ -127,6 +140,10 @@
                 </div>
                 <button type="submit" class="btn">إضافة اللاعب وتوليد الرمز</button>
             </form>
+
+            <div id="generatedPassBox" class="generated-code-box">
+                تم توليد الرمز للاعب الجديد: <strong id="generatedPassText"></strong>
+            </div>
         </div>
 
         <div class="section">
@@ -150,24 +167,38 @@
 
     <script>
         let players = [
-            { name: "احمد محمد علي", pass: "12345" }
+            { name: "احمد محمد علي", pass: "A123" }
         ];
 
-        function generatePassword() {
-            // توليد رمز عشوائي مكون من 6 أرقام وحروف
-            return Math.random().toString(36).slice(-8);
+        function generateCustomPassword() {
+            // اختيار حرف عشوائي واحد
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const randomLetter = letters.charAt(Math.floor(Math.random() * letters.length));
+            
+            // اختيار 3 أرقام عشوائية
+            const randomNumber = Math.floor(100 + Math.random() * 900); // يضمن أنه يتكون من 3 أرقام (مثال: 582)
+            
+            // الدمج (حرف + 3 أرقام)
+            return randomLetter + randomNumber;
         }
 
         function addPlayer(event) {
             event.preventDefault();
             const name = document.getElementById('newPlayerName').value;
-            const pass = generatePassword(); // توليد تلقائي
+            const pass = generateCustomPassword(); // توليد تلقائي (حرف + 3 أرقام)
             
+            // إضافة اللاعب لقاعدة البيانات الوهمية
             players.push({ name, pass });
             updatePlayersList();
             
+            // إظهار المربع الذي يحتوي على الرمز للإدارة
+            const passBox = document.getElementById('generatedPassBox');
+            const passText = document.getElementById('generatedPassText');
+            
+            passText.textContent = pass;
+            passBox.style.display = 'block'; // إظهار المربع على الشاشة
+
             document.getElementById('newPlayerName').value = '';
-            alert('تمت إضافة اللاعب بنجاح. رمز المرور الجديد هو: ' + pass);
         }
 
         function updatePlayersList() {
