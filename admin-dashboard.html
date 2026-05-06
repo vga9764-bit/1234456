@@ -51,7 +51,7 @@
             color: #94a3b8;
         }
 
-        .input-group input, .input-group textarea {
+        .input-group input, .input-group textarea, .input-group select {
             width: 100%;
             padding: 12px;
             background-color: #0f172a;
@@ -123,11 +123,17 @@
             align-items: center;
             padding: 10px 0;
             border-bottom: 1px solid #334155;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
-        .player-item:last-child {
-            border-bottom: none;
+        .player-item img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #3b82f6;
         }
     </style>
 </head>
@@ -142,6 +148,24 @@
                 <div class="input-group">
                     <label for="newPlayerName">الاسم الثلاثي للاعب:</label>
                     <input type="text" id="newPlayerName" placeholder="مثال: احمد محمد علي" required>
+                </div>
+                <div class="input-group">
+                    <label for="newPlayerBirth">سنة المواليد (أو تاريخ الميلاد):</label>
+                    <input type="text" id="newPlayerBirth" placeholder="مثال: 2000 أو 15/05/2000" required>
+                </div>
+                <div class="input-group">
+                    <label for="newPlayerPosition">مركز اللعب:</label>
+                    <select id="newPlayerPosition" required>
+                        <option value="">اختر المركز...</option>
+                        <option value="حارس مرمى">حارس مرمى</option>
+                        <option value="دفاع">دفاع</option>
+                        <option value="وسط">وسط</option>
+                        <option value="هجوم">هجوم</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="newPlayerImage">اختر صورة اللاعب:</label>
+                    <input type="file" id="newPlayerImage" accept="image/*" required>
                 </div>
                 <button type="submit" class="btn">إضافة اللاعب وتوليد الرمز</button>
             </form>
@@ -167,12 +191,10 @@
     </div>
 
     <script>
-        // قراءة البيانات من الذاكرة
         let players = JSON.parse(localStorage.getItem('clubPlayers')) || [
-            { name: "احمد محمد علي", pass: "A123" }
+            { name: "احمد محمد علي", pass: "A123", birth: "2000", position: "وسط", image: "" }
         ];
 
-        // دالة توليد الرمز بدون شارحة (حرف إنجليزي + 3 أرقام: مثال R742)
         function generateShortPassword() {
             const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             const randomLetter = letters.charAt(Math.floor(Math.random() * letters.length));
@@ -183,34 +205,45 @@
         function addPlayer(event) {
             event.preventDefault();
             const name = document.getElementById('newPlayerName').value.trim();
+            const birth = document.getElementById('newPlayerBirth').value.trim();
+            const position = document.getElementById('newPlayerPosition').value;
+            const imageInput = document.getElementById('newPlayerImage');
+            
             const pass = generateShortPassword();
-            
-            players.push({ name, pass });
+
+            if (imageInput.files && imageInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageData = e.target.result;
+                    saveNewPlayer(name, pass, birth, position, imageData);
+                };
+                reader.readAsDataURL(imageInput.files[0]);
+            } else {
+                saveNewPlayer(name, pass, birth, position, "");
+            }
+        }
+
+        function saveNewPlayer(name, pass, birth, position, image) {
+            players.push({ name, pass, birth, position, image });
             localStorage.setItem('clubPlayers', JSON.stringify(players));
-            
             updatePlayersList();
             
             document.getElementById('newPlayerName').value = '';
-            alert('تمت إضافة اللاعب بنجاح. رمز المرور الخاص باللاعب هو: ' + pass);
+            document.getElementById('newPlayerBirth').value = '';
+            document.getElementById('newPlayerPosition').value = '';
+            document.getElementById('newPlayerImage').value = '';
+            
+            alert('تمت إضافة اللاعب بنجاح. رمز المرور الخاص به هو: ' + pass);
         }
 
-        // دالة لحذف اللاعب
         function deletePlayer(index) {
             const playerName = players[index].name;
-            
-            // تأكيد الحذف
             const confirmDelete = confirm('هل أنت متأكد من حذف اللاعب: ' + playerName + '؟');
             
             if (confirmDelete) {
-                // إزالة اللاعب من القائمة
                 players.splice(index, 1);
-                
-                // تحديث الذاكرة المحلية
                 localStorage.setItem('clubPlayers', JSON.stringify(players));
-                
-                // تحديث القائمة المعروضة
                 updatePlayersList();
-                
                 alert('تم حذف اللاعب ' + playerName + ' بنجاح.');
             }
         }
@@ -228,9 +261,13 @@
                 const item = document.createElement('div');
                 item.className = 'player-item';
                 
-                // تم إضافة زر حذف بجانب اسم اللاعب وكلمة المرور
+                let imgTag = p.image ? `<img src="${p.image}" alt="صورة اللاعب">` : 'لا توجد صورة';
+
                 item.innerHTML = `
-                    <span><strong>${p.name}</strong></span> 
+                    ${imgTag}
+                    <span><strong>${p.name}</strong></span>
+                    <span>${p.position}</span>
+                    <span>مواليد: ${p.birth}</span>
                     <span>الرمز: <strong>${p.pass}</strong></span>
                     <button class="btn-danger" onclick="deletePlayer(${index})">حذف</button>
                 `;
@@ -247,7 +284,6 @@
             document.getElementById('newsContent').value = '';
         }
 
-        // تحديث القائمة عند تحميل الصفحة
         updatePlayersList();
     </script>
 </body>
