@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول - Al-Rajaa Club</title>
+    <title>تطبيق نادي Al-Rajaa Club</title>
     <style>
         * {
             box-sizing: border-box;
@@ -21,7 +21,7 @@
             height: 100vh;
         }
 
-        .login-container {
+        .main-container {
             background-color: #1e293b;
             padding: 40px;
             border-radius: 16px;
@@ -33,21 +33,25 @@
         }
 
         .logo-area img {
-            width: 120px;
-            height: 120px;
-            margin-bottom: 25px;
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
             border-radius: 50%;
-            border: 3px solid #3b82f6;
-            object-fit: cover;
+            border: 2px solid #3b82f6;
             background-color: #ffffff;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            object-fit: cover;
         }
 
-        .welcome-message {
-            font-size: 1.25rem;
+        h1 {
+            color: #3b82f6;
+            margin-bottom: 15px;
+            font-size: 1.6rem;
+        }
+
+        p {
             color: #94a3b8;
-            margin-bottom: 35px;
-            line-height: 1.6;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
         }
 
         .btn-group {
@@ -59,48 +63,44 @@
         .btn {
             background-color: #3b82f6;
             color: #ffffff;
-            padding: 15px;
+            padding: 14px;
             border: none;
-            border-radius: 8px;
-            font-size: 1.15rem;
+            border-radius: 6px;
+            font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
+            transition: background-color 0.3s;
         }
 
         .btn:hover {
             background-color: #1d4ed8;
-            transform: translateY(-2px);
         }
 
         .btn-secondary {
-            background-color: #000000;
-            border: 1px solid #3b82f6;
-            color: #3b82f6;
+            background-color: transparent;
+            border: 1px solid #475569;
+            color: #94a3b8;
         }
 
         .btn-secondary:hover {
-            background-color: #111827;
-            color: #60a5fa;
+            background-color: #334155;
+            color: #ffffff;
         }
     </style>
 </head>
 <body>
 
-    <div class="login-container">
+    <div class="main-container">
         <div class="logo-area">
-            <img src="icon-192.png" alt="شعار نادي الرجاء العراقي">
+            <img src="icon-192.png" alt="شعار النادي">
         </div>
-
-        <div class="welcome-message">
-            مرحباً بك في التطبيق الرسمي لنادي الرجاء الرياضي! <br> 
-            اختر طريقة الدخول للمتابعة.
-        </div>
+        
+        <h1>Al-Rajaa Club</h1>
+        <p>اختر لوحة التحكم للبدء</p>
 
         <div class="btn-group">
-          <button class="btn" onclick="window.location.href='player-login.html'">دخول كلاعب</button>
-            <button class="btn btn-secondary" onclick="alert('جارٍ الانتقال إلى صفحة دخول المشجعين...')">دخول كمشجع</button>
+            <button class="btn" onclick="window.location.href='player-login.html'">دخول كلاعب</button>
+            <button class="btn btn-secondary" onclick="window.location.href='admin-dashboard.html'">دخول الإدارة (Admin)</button>
         </div>
     </div>
 
