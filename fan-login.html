@@ -131,11 +131,20 @@
     </div>
 
     <script>
+        // التحقق إذا كان المشجع مسجلاً مسبقاً عند فتح الصفحة
+        if (localStorage.getItem('currentFan')) {
+            window.location.href = 'fan-dashboard.html';
+        }
+
         function saveFanAndRedirect(event) {
             event.preventDefault();
             
             const name = document.getElementById('fanName').value.trim();
             
+            // 1. حفظ المشجع الحالي
+            localStorage.setItem('currentFan', name);
+            
+            // 2. إضافته لقائمة المشجعين الإجمالية
             let fansList = JSON.parse(localStorage.getItem('clubFans')) || [];
             fansList.push({ name: name, joinedDate: new Date().toLocaleDateString() });
             localStorage.setItem('clubFans', JSON.stringify(fansList));
