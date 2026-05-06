@@ -2,84 +2,255 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>دخول الإدارة - Al-Rajaa Club</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ملف اللاعب - Al-Rajaa Club</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
         body {
             background-color: #0f172a;
             color: #ffffff;
-            font-family: sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            min-height: 100vh;
+            padding: 20px;
         }
-        .container {
+
+        .login-container, .profile-container {
             background-color: #1e293b;
             padding: 40px;
             border-radius: 16px;
-            width: 350px;
+            width: 100%;
+            max-width: 400px;
             text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
             border: 2px solid #3b82f6;
         }
+
+        .logo-area img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            border-radius: 50%;
+            border: 2px solid #3b82f6;
+            background-color: #ffffff;
+            object-fit: cover;
+        }
+
         h2 {
             color: #3b82f6;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
         }
-        input {
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        .input-group input {
             width: 100%;
             padding: 12px;
-            margin-bottom: 20px;
             background-color: #0f172a;
             border: 1px solid #3b82f6;
             border-radius: 6px;
             color: #ffffff;
-            box-sizing: border-box;
+            font-size: 1rem;
             outline: none;
         }
-        button {
-            width: 100%;
-            padding: 12px;
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .btn {
             background-color: #3b82f6;
             color: #ffffff;
+            padding: 12px;
             border: none;
             border-radius: 6px;
+            font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
-            margin-bottom: 10px;
+            transition: background-color 0.3s;
         }
-        button:hover {
+
+        .btn:hover {
             background-color: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid #475569;
+            color: #94a3b8;
+        }
+
+        .btn-secondary:hover {
+            background-color: #334155;
+            color: #ffffff;
+        }
+
+        /* تنسيق بطاقة اللاعب */
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid #3b82f6;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            background-color: #ffffff;
+        }
+
+        .profile-card h3 {
+            color: #3b82f6;
+            margin-bottom: 15px;
+            font-size: 1.6rem;
+        }
+
+        .profile-info {
+            text-align: right;
+            margin-top: 20px;
+            background-color: #0f172a;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+        }
+
+        .profile-info p {
+            margin: 8px 0;
+            color: #e2e8f0;
+            font-size: 1.1rem;
+        }
+
+        .profile-info strong {
+            color: #3b82f6;
+        }
+
+        .announcement-box {
+            margin-top: 20px;
+            background-color: #06b6d4;
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: right;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>دخول الإدارة</h2>
-        <form onsubmit="checkAdmin(event)">
-            <input type="password" id="adminPass" placeholder="أدخل رمز الإدارة" required>
-            <button type="submit">دخول</button>
-            <button type="button" style="background-color: #475569;" onclick="window.location.href='index.html'">العودة للرئيسية</button>
+    <div class="login-container" id="loginArea">
+        <div class="logo-area">
+            <img src="icon-192.png" alt="شعار النادي">
+        </div>
+
+        <h2>دخول اللاعبين</h2>
+
+        <form id="loginForm" onsubmit="checkPlayerLogin(event)">
+            <div class="input-group">
+                <label for="playerName">الاسم الثلاثي للاعب:</label>
+                <input type="text" id="playerName" placeholder="أدخل اسمك الثلاثي هنا" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">كلمة المرور:</label>
+                <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
+            </div>
+
+            <div class="btn-group">
+                <button type="submit" class="btn">تسجيل الدخول</button>
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='index.html'">العودة للرئيسية</button>
+            </div>
         </form>
     </div>
 
+    <div class="profile-container" id="profileArea" style="display: none;">
+        <div id="playerDetails">
+            </div>
+        
+        <div class="announcement-box" id="announcementArea" style="display: none;">
+            <strong>إعلان هام من الإدارة:</strong>
+            <p id="announcementText"></p>
+        </div>
+        
+        <div class="btn-group">
+            <button class="btn" style="background-color: #e11d48;" onclick="logout()">تسجيل الخروج</button>
+        </div>
+    </div>
+
     <script>
-        function checkAdmin(event) {
+        function checkPlayerLogin(event) {
             event.preventDefault();
-            const pass = document.getElementById('adminPass').value;
-            
-            // ----------------------------------------
-            // اكتب هنا الرمز السري الجديد الذي تريده داخل علامتي الاقتباس
-            // ----------------------------------------
-            const myPassword = "azooz368549299009"; 
-            
-            if (pass === myPassword) {
-                window.location.href = 'admin-dashboard.html';
+
+            const nameInput = document.getElementById('playerName').value.trim();
+            const passInput = document.getElementById('password').value.trim();
+
+            const storedPlayers = localStorage.getItem('clubPlayers');
+            if (!storedPlayers) {
+                alert('لا توجد بيانات للاعبين مسجلة. يرجى إضافة لاعبين من لوحة الإدارة أولاً.');
+                return;
+            }
+
+            const playersList = JSON.parse(storedPlayers);
+            const foundPlayer = playersList.find(p => p.name === nameInput && p.pass === passInput);
+
+            if (foundPlayer) {
+                // إخفاء نموذج الدخول وإظهار الملف الشخصي
+                document.getElementById('loginArea').style.display = 'none';
+                document.getElementById('profileArea').style.display = 'block';
+
+                // عرض معلومات اللاعب
+                let imageSrc = foundPlayer.image || 'https://via.placeholder.com/120';
+                const playerDetailsDiv = document.getElementById('playerDetails');
+
+                playerDetailsDiv.innerHTML = `
+                    <img src="${imageSrc}" class="profile-img" alt="صورة اللاعب">
+                    <h3>${foundPlayer.name}</h3>
+                    <div class="profile-info">
+                        <p><strong>مركز اللعب:</strong> ${foundPlayer.position || 'غير محدد'}</p>
+                        <p><strong>سنة المواليد:</strong> ${foundPlayer.birth || 'غير محدد'}</p>
+                        <p><strong>كلمة المرور:</strong> ${foundPlayer.pass}</p>
+                    </div>
+                `;
+
+                // فحص إذا كان هناك إعلان للإدارة لعرضه
+                const storedNews = localStorage.getItem('clubNews');
+                const announcementArea = document.getElementById('announcementArea');
+                const announcementText = document.getElementById('announcementText');
+
+                if (storedNews) {
+                    announcementArea.style.display = 'block';
+                    announcementText.innerText = storedNews;
+                }
+
+                alert('أهلاً بك يا كابتن ' + nameInput + '. تم تسجيل الدخول بنجاح!');
             } else {
-                alert('رمز الدخول غير صحيح!');
+                alert('خطأ: الاسم الثلاثي أو كلمة المرور غير صحيحة. يرجى التأكد من البيانات والمحاولة مرة أخرى.');
             }
         }
+
+        function logout() {
+            document.getElementById('loginArea').style.display = 'block';
+            document.getElementById('profileArea').style.display = 'none';
+            document.getElementById('playerName').value = '';
+            document.getElementById('password').value = '';
+        }
     </script>
+
 </body>
 </html>
