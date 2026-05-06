@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دخول الإدارة - Al-Rajaa Club</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background-color: #1e293b;
+            padding: 40px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            border: 2px solid #3b82f6;
+        }
+
+        h2 {
+            color: #3b82f6;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #94a3b8;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            background-color: #0f172a;
+            border: 1px solid #3b82f6;
+            border-radius: 6px;
+            color: #ffffff;
+            outline: none;
+        }
+
+        .btn {
+            background-color: #3b82f6;
+            color: #ffffff;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>تسجيل دخول الإدارة</h2>
+        <form onsubmit="checkAdmin(event)">
+            <div class="input-group">
+                <label for="adminPass">رمز الدخول السري للإدارة:</label>
+                <input type="password" id="adminPass" placeholder="أدخل رمز الإدارة" required>
+            </div>
+            <button type="submit" class="btn">دخول</button>
+            <button type="button" class="btn" style="background-color: #475569; margin-top: 10px;" onclick="window.location.href='index.html'">العودة للرئيسية</button>
+        </form>
+    </div>
+
+    <script>
+        function checkAdmin(event) {
+            event.preventDefault();
+            const pass = document.getElementById('adminPass').value;
+            // يمكنك تغيير كلمة المرور أدناه إلى ما تريد
+            if (pass === "RajaaAdmin2026") {
+                window.location.href = 'admin-dashboard.html';
+            } else {
+                alert('رمز الدخول غير صحيح!');
+            }
+        }
+    </script>
+</body>
+</html>
